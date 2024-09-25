@@ -7,14 +7,19 @@ type Discussion = record {
   downvotes : nat64;
 };
 type Result = variant { Ok : Discussion; Err : text };
-type Result_1 = variant { Ok : User; Err : text };
-type Result_2 = variant { Ok : text; Err : text };
+type Result_1 = variant { Ok : text; Err : text };
+type Result_2 = variant { Ok : record { nat64; nat64 }; Err : text };
+type Result_3 = variant { Ok : User; Err : text };
 type User = record { id : nat64; username : text; created_at : nat64 };
 type VoteType = variant { Downvote; Upvote };
 service : {
   create_discussion : (text, text) -> (Result);
+  delete_user : (text) -> (Result_1);
+  edit_discussion : (nat64, text, text) -> (Result_1);
   get_discussions : () -> (vec Discussion) query;
   get_users : () -> (vec User) query;
-  register_user : (text) -> (Result_1);
-  vote_discussion : (VoteType, nat64, text) -> (Result_2);
+  get_vote_count : (nat64) -> (Result_2) query;
+  register_user : (text) -> (Result_3);
+  remove_vote : (nat64, text) -> (Result_1);
+  vote_discussion : (VoteType, nat64, text) -> (Result_1);
 }
